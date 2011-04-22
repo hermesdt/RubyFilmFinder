@@ -1,5 +1,4 @@
 class Film < Sequel::Model(:films)
-  validates_presence_of :name
-  validates_presence_of :date
-  validates_presence_of :description
+  many_to_many :categories
+  one_to_one :link
 end
