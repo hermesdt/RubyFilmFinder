@@ -1,6 +1,11 @@
 require 'rubygems'
 require 'rake'
 
+desc "Start a sequel console"
+task :console do
+  system "sequel -r config/sequel_init_console.rb -L models"
+end
+
 namespace :db do
   require 'sequel'
   require 'logger'
