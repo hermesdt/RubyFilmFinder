@@ -92,10 +92,10 @@ module Parser
     end
 
     def self.online_link(link)
-      build_temp_js(link)
+      urls = extract_links_from_temp_js(link)
     end
 
-    def self.build_temp_js(link)
+    def self.extract_links_from_temp_js(link)
       url = URI.parse(link)
       head = javascript_util_head(url)
       tail = javascript_util_tail
@@ -106,6 +106,7 @@ module Parser
       require 'v8/cli'
 
       script = SCRIPTS[url.path.split("/")[2]]
+      raise Exception.new("[EE] tipo de script no conocido") if script.nil?
 
       File.open(TEMP_JS, "w") do |w|
         w.puts head
@@ -116,10 +117,18 @@ module Parser
         end
         w.puts tail
       end
-      puts "---"
-      puts url.path
+      sio = StringIO.new
+      old_stdout, $stdout = $stdout, sio
+
       c = V8::Context.new(:with => V8::CLI::Shell.new)
       c.load(TEMP_JS)
+      $stdout = old_stdout
+      urls = sio.string.scan(/href='(.*?)'/)
+      urls.delete_if do |u|
+        u[0] =~ /divx\.com\/es\/divx/
+      end
+      #puts urls
+      urls
     end
 
     def self.javascript_util_head(link)

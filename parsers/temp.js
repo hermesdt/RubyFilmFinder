@@ -1,6 +1,6 @@
 
       function locclass() {
-          this.search = '?d=-3&embed=no&id=%DA%D4%C9%DA%CC%A1%F2%92'; }
+          this.search = '?d=-3&embed=no&id=%C7%B8%AB%AF%DA%A1%F4%9E'; }
       location = new locclass();
            
       function docclass() {
